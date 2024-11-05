@@ -1,0 +1,6 @@
+@Djini_OOP_Lab8_HostAddress = http://localhost:5106
+
+GET {{Djini_OOP_Lab8_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
