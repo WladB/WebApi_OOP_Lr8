@@ -1,6 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using System.ComponentModel.Design;
-using System;
 
 namespace Djini_OOP_Lab8.BLL
 {

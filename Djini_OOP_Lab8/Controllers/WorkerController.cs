@@ -1,7 +1,5 @@
 ﻿using Djini_OOP_Lab8.BLL;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
 namespace Djini_OOP_Lab8.Controllers
 {
@@ -16,6 +14,16 @@ namespace Djini_OOP_Lab8.Controllers
             _workerService = workerService;
         }
 
+        /// <summary>
+        /// Отримує обліковий запис працівника за його ідентифікатором
+        /// </summary>
+        /// <param name="id">Ідентифікатор працівника</param>
+        /// <returns>
+        /// Повертає рядок, що містить створений об'єкт worker, якщо знайдено відповідний запис; у разі відсутності або виникнення помилки повертає BadRequest з повідомленням про помилку
+        /// </returns>
+        [ProducesResponseType(typeof(Worker), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [HttpGet("{id}")]
         public async Task<ActionResult<Worker>> GetWorker(int id)
         {
@@ -30,13 +38,26 @@ namespace Djini_OOP_Lab8.Controllers
             }
         }
 
+        /// <summary>
+        /// Створює обліковий запис нового працівника
+        /// </summary>
+        /// <param name="workerName">Ім'я працівника</param>
+        /// <param name="workerAdress">Адреса працівника</param>
+        /// <param name="workerPhone">Телефон працівника</param>
+        /// <param name="workerEmail">Ел. адреса працівника</param>
+        /// <returns>
+        /// Повертає рядок, що містить створений об'єкт worker, якщо знайдено відповідний запис; у разі відсутності або виникнення помилки повертає BadRequest з повідомленням про помилку
+        /// </returns>
+        [ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [HttpPost("{workerName}/{workerAdress}/{workerPhone}/{workerEmail}")]
         public async Task<ActionResult<Worker>> CreateWorker(string workerName, string workerAdress, string workerPhone, string workerEmail)
         {
             try
             {
                 var createdWorker = await _workerService.CreateWorkerAsync(workerName, workerAdress, workerPhone, workerEmail);
-                return CreatedAtAction(nameof(GetWorker), new { id = createdWorker.Id }, createdWorker);
+                return Ok(createdWorker);
             }
             catch (InvalidOperationException ex)
             {
@@ -44,6 +65,20 @@ namespace Djini_OOP_Lab8.Controllers
             }
         }
 
+        /// <summary>
+        /// Оновлює дані в обліковому записі працівника за його ідентифікатором
+        /// </summary>
+        /// <param name="id">Ідентифікатор працівника</param>
+        /// <param name="workerName">Оновлене ім'я працівника</param>
+        /// <param name="workerAdress">Оновлена адреса працівника</param>
+        /// <param name="workerPhone">Оновлений телефон працівника</param>
+        /// <param name="workerEmail">Оновлена Ел. адреса працівника</param>
+        /// <returns>
+        /// Повертає повідомлення "Дані працівника успішно оновленно", якщо дані працівника оновились успішно; у разі відсутності або виникнення помилки повертає BadRequest з повідомленням про помилку
+        /// </returns>
+        [ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [HttpPut("{id}/{workerName}/{workerAdress}/{workerPhone}/{workerEmail}")]
         public async Task<IActionResult> UpdateWorker(int id, string workerName, string workerAdress, string workerPhone, string workerEmail)
         {
@@ -58,6 +93,16 @@ namespace Djini_OOP_Lab8.Controllers
             }
         }
 
+        /// <summary>
+        /// Видаляє обліковий запис працівника за його ідентифікатором
+        /// </summary>
+        /// <param name="id">Ідентифікатор облікового запису працівника, який потрібно видалити</param>
+        /// <returns>
+        /// Повертає повідомлення "Дані працівника успішно видалено", якщо дані працівника було видалено; у разі відсутності або виникнення помилки повертає BadRequest з повідомленням про помилку.
+        /// </returns>
+        [ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteWorker(int id)
         {

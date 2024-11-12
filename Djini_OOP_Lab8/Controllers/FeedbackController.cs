@@ -1,8 +1,5 @@
 ﻿using Djini_OOP_Lab8.BLL;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using System.ComponentModel.Design;
-
 namespace Djini_OOP_Lab8.Controllers
 {
     [Route("api/[controller]")]
@@ -16,6 +13,17 @@ namespace Djini_OOP_Lab8.Controllers
             _resumeService = resumeService;
         }
 
+        /// <summary>
+        /// Отримує відгук за ідентифікаторами компанії та працівника
+        /// </summary>
+        /// <param name="companyId">Ідентифікатор команії</param>
+        /// <param name="workerId">Ідентифікатор працівника</param>
+        /// <returns>
+        /// Повертає об'єкт feedback, якщо знайдено відповідний запис; у разі відсутності або виникнення помилки повертає BadRequest з повідомленням про помилку.
+        /// </returns>
+        [ProducesResponseType(typeof(Feedback), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [HttpGet("{companyId}/{workerId}")]
         public async Task<ActionResult<Feedback>> GetFeedback(int companyId, int workerId)
         {
@@ -30,6 +38,18 @@ namespace Djini_OOP_Lab8.Controllers
             }
         }
 
+        /// <summary>
+        /// Створює новий відгук
+        /// </summary>
+        /// <param name="companyId">Ідентифікатор команії</param>
+        /// <param name="workerId">Ідентифікатор працівника</param>
+        /// <param name="resumeContent">Вміст відгуку</param>
+        /// <returns>
+        /// Повертає рядок, що містить створений об'єкт feedback, якщо знайдено відповідний запис; у разі відсутності або виникнення помилки повертає BadRequest з повідомленням про помилку
+        /// </returns
+        [ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [HttpPost("{companyId}/{workerId}/{resumeContent}")]
         public async Task<ActionResult<Feedback>> CreateFeedback(int companyId, int workerId, string resumeContent)
         {
@@ -44,6 +64,18 @@ namespace Djini_OOP_Lab8.Controllers
             }
         }
 
+        /// <summary>
+        /// Оновлює дані відгуку за ідентифікаторами вакансії та працівника
+        /// </summary>
+        /// <param name="companyId">Ідентифікатор команії</param>
+        /// <param name="workerId">Ідентифікатор працівника</param>
+        /// <param name="resumeContent">Оновлений вміст відгуку</param>
+        /// <returns>
+        /// Повертає повідомлення "Дані відгуку успішно оновленно", якщо відгук оновилась успішно; у разі відсутності або виникнення помилки повертає BadRequest з повідомленням про помилку
+        /// </returns>
+        [ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [HttpPut("{companyId}/{workerId}/{resumeContent}")]
         public async Task<IActionResult> UpdateFeedback(int companyId, int workerId, string resumeContent)
         {
@@ -58,6 +90,17 @@ namespace Djini_OOP_Lab8.Controllers
             }
         }
 
+        /// <summary>
+        /// Видаляє відгук за ідентифікаторами вакансії та працівника
+        /// </summary>
+        /// <param name="companyId">Ідентифікатор команії</param>
+        /// <param name="workerId">Ідентифікатор працівника</param>
+        /// <returns>
+        /// Повертає повідомлення "Відгук успішно видалено", якщо відгуку було видалено; у разі відсутності або виникнення помилки повертає BadRequest з повідомленням про помилку.
+        /// </returns>
+        [ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [HttpDelete("{companyId}/{workerId}")]
         public async Task<IActionResult> DeleteFeedback(int companyId, int workerId)
         {

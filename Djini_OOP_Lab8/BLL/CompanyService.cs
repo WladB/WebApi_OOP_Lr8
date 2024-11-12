@@ -1,6 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using System.ComponentModel.Design;
+﻿using Microsoft.EntityFrameworkCore;
+
 
 
 namespace Djini_OOP_Lab8.BLL

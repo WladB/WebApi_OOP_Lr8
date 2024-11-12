@@ -1,9 +1,5 @@
 ﻿using Djini_OOP_Lab8.BLL;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using System;
-using System.ComponentModel.Design;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
 namespace Djini_OOP_Lab8.Controllers
 {
@@ -18,6 +14,16 @@ namespace Djini_OOP_Lab8.Controllers
             _vacancyService = vacancyService;
         }
 
+        /// <summary>
+        /// Отримує вакансію за її ідентифікатором
+        /// </summary>
+        /// <param name="id">Ідентифікатор вакансії</param>
+        /// <returns>
+        /// Повертає об'єкт vacancy, якщо знайдено відповідний запис; у разі відсутності або виникнення помилки повертає BadRequest з повідомленням про помилку.
+        /// </returns>
+        [ProducesResponseType(typeof(Vacancy), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [HttpGet("{id}")]
         public async Task<ActionResult<Vacancy>> GetVacancy(int id)
         {
@@ -32,13 +38,25 @@ namespace Djini_OOP_Lab8.Controllers
             }
         }
 
+        /// <summary>
+        /// Створює нову вакансію
+        /// </summary>
+        /// <param name="caption">Назва вакансії</param>
+        /// <param name="description">Опис вакансії</param>
+        /// <param name="companyId">Ідентифікатор компанії, що надає вакансію</param>
+        /// <returns>
+        /// Повертає рядок, що містить створений об'єкт vacancy, якщо знайдено відповідний запис; у разі відсутності або виникнення помилки повертає BadRequest з повідомленням про помилку
+        /// </returns>
+        [ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [HttpPost("{caption}/{description}/{companyId}")]
         public async Task<ActionResult<Vacancy>> CreateVacancy(string caption, string description, int companyId)
         {
             try
             {
                 var createdVacancy = await _vacancyService.CreateVacancyAsync(caption, description, companyId);
-                return CreatedAtAction(nameof(GetVacancy), new { id = createdVacancy.Id }, createdVacancy);
+                return Ok(createdVacancy); ;
             }
             catch (InvalidOperationException ex)
             {
@@ -46,6 +64,19 @@ namespace Djini_OOP_Lab8.Controllers
             }
         }
 
+        /// <summary>
+        /// Оновлює дані вакансії за її ідентифікатором
+        /// </summary>
+        /// <param name="id">Ідентифікатор вакансії</param>
+        /// <param name="caption">Оновлена назва вакансії</param>
+        /// <param name="description">Оновлений опис вакансії</param>
+        /// <param name="companyId">Оновлений ідентифікатор компанії, що надає вакансію</param>
+        /// <returns>
+        /// Повертає повідомлення "Дані вакансії успішно оновленно", якщо вакансія оновилась успішно; у разі відсутності або виникнення помилки повертає BadRequest з повідомленням про помилку
+        /// </returns>
+        [ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [HttpPut("{id}/{caption}/{description}/{companyId}")]
         public async Task<IActionResult> UpdateVacancy(int id, string caption, string description, int companyId)
         {
@@ -60,6 +91,16 @@ namespace Djini_OOP_Lab8.Controllers
             }
         }
 
+        /// <summary>
+        /// Видаляє вакансію за її ідентифікатором
+        /// </summary>
+        /// <param name="id">Ідентифікатор вакансії, яку потрібно видалити</param>
+        /// <returns>
+        /// Повертає повідомлення "Вакансію успішно видалено", якщо вакансію було видалено; у разі відсутності або виникнення помилки повертає BadRequest з повідомленням про помилку.
+        /// </returns>
+        [ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteVacancy(int id)
         {

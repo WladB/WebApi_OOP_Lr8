@@ -1,8 +1,5 @@
 ﻿using Djini_OOP_Lab8.BLL;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using System.ComponentModel.Design;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
 namespace Djini_OOP_Lab8.Controllers
 {
@@ -17,6 +14,17 @@ namespace Djini_OOP_Lab8.Controllers
             _resumeService = resumeService;
         }
 
+        /// <summary>
+        /// Отримує резюме за ідентифікаторами вакансії та працівника
+        /// </summary>
+        /// <param name="vacancyId">Ідентифікатор вакансії</param>
+        /// <param name="workerId">Ідентифікатор працівника</param>
+        /// <returns>
+        /// Повертає об'єкт resume, якщо знайдено відповідний запис; у разі відсутності або виникнення помилки повертає BadRequest з повідомленням про помилку.
+        /// </returns>
+        [ProducesResponseType(typeof(Resume), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [HttpGet("{vacancyId}/{workerId}")]
         public async Task<ActionResult<Resume>> GetResume(int vacancyId, int workerId)
         {
@@ -31,6 +39,18 @@ namespace Djini_OOP_Lab8.Controllers
             }
         }
 
+        /// <summary>
+        /// Створює нове резюме
+        /// </summary>
+        /// <param name="vacancyId">Ідентифікатор вакансії</param>
+        /// <param name="workerId">Ідентифікатор працівника</param>
+        /// <param name="resumeContent">Вміст резюме</param>
+        /// <returns>
+        /// Повертає рядок, що містить створений об'єкт resume, якщо знайдено відповідний запис; у разі відсутності або виникнення помилки повертає BadRequest з повідомленням про помилку
+        /// </returns>
+        [ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [HttpPost("{vacancyId}/{workerId}/{resumeContent}")]
         public async Task<ActionResult<Resume>> CreateResume(int vacancyId, int workerId, string resumeContent)
         {
@@ -45,6 +65,18 @@ namespace Djini_OOP_Lab8.Controllers
             }
         }
 
+        /// <summary>
+        /// Оновлює дані резюме за ідентифікаторами вакансії та працівника
+        /// </summary>
+        /// <param name="vacancyId">Ідентифікатор вакансії</param>
+        /// <param name="workerId">Ідентифікатор працівника</param>
+        /// <param name="resumeContent">Оновлений вміст резюме</param>
+        /// <returns>
+        /// Повертає повідомлення "Дані резюме успішно оновленно", якщо резюме оновилась успішно; у разі відсутності або виникнення помилки повертає BadRequest з повідомленням про помилку
+        /// </returns>
+        [ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [HttpPut("{vacancyId}/{workerId}/{resumeContent}")]
         public async Task<IActionResult> UpdateResume(int vacancyId, int workerId, string resumeContent)
         {
@@ -59,6 +91,17 @@ namespace Djini_OOP_Lab8.Controllers
             }
         }
 
+        /// <summary>
+        /// Видаляє резюме за ідентифікаторами вакансії та працівника
+        /// </summary>
+        /// <param name="vacancyId">Ідентифікатор вакансії</param>
+        /// <param name="workerId">Ідентифікатор працівника</param>
+        /// <returns>
+        /// Повертає повідомлення "Резюме успішно видалено", якщо резюме було видалено; у разі відсутності або виникнення помилки повертає BadRequest з повідомленням про помилку.
+        /// </returns>
+        [ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [HttpDelete("{vacancyId}/{workerId}")]
         public async Task<IActionResult> DeleteResume(int vacancyId, int workerId)
         {
